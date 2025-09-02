@@ -62,24 +62,40 @@ function clearItems() {
   checkUI();
 }
 
+// Item filter function show/hide list items based on input text.
+function filterItems(e) {
+  const items = itemList.querySelectorAll("li");
+  const text = e.target.value.toLowerCase();
+
+  items.forEach((item) => {
+    const itemName = item.firstChild.textContent.toLowerCase();
+
+    if (itemName.indexOf(text) != -1) {
+      item.style.display = "flex";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
 // Checks whether list items is empty; add function in areas where list item changes
 function checkUI() {
-    // define items here, not in global because it never updates if global
-    const items = document.querySelectorAll('li');
+  // define items here, not in global because it never updates if global
+  const items = document.querySelectorAll("li");
 
-    if (items.length === 0) {
-        clearBtn.style.display = "none";
-        itemFilter.style.display = "none";
-    }
-    else {
-        clearBtn.style.display = "block";
-        itemFilter.style.display = "block";
-    }
+  if (items.length === 0) {
+    clearBtn.style.display = "none";
+    itemFilter.style.display = "none";
+  } else {
+    clearBtn.style.display = "block";
+    itemFilter.style.display = "block";
+  }
 }
 
 // Event Listeners
 itemForm.addEventListener("submit", addItem);
 itemList.addEventListener("click", removeItem);
 clearBtn.addEventListener("click", clearItems);
+itemFilter.addEventListener("input", filterItems);
 
 checkUI();
