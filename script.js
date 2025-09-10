@@ -6,6 +6,12 @@ const itemList = document.querySelector("#item-list"); // The unordered list whe
 const clearBtn = document.querySelector("#clear"); // The "Clear All" button
 const itemFilter = document.querySelector("#filter"); // The input field to filter/search through items
 
+function displayItems() {
+  const itemsFromStorage = getItemsFromStorage();
+  itemsFromStorage.forEach((item) => addItemToDOM(item));
+  checkUI();
+}
+
 // === FUNCTION: Add Item to List ===
 function onAddItemSubmit(e) {
   e.preventDefault(); // Prevents default form submission behavior (page reload)
@@ -44,6 +50,14 @@ function addItemToDOM(item) {
 
 // === STORAGE: Save Item to localStorage ===
 function addItemToStorage(item) {
+  const itemsFromStorage = getItemsFromStorage();
+
+  itemsFromStorage.push(item); // Add new item to array
+
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage)); // Save updated array to localStorage
+}
+
+function getItemsFromStorage() {
   let itemsFromStorage;
 
   // Get existing items from localStorage, or initialize an empty array
@@ -53,9 +67,7 @@ function addItemToStorage(item) {
     itemsFromStorage = JSON.parse(localStorage.getItem("items"));
   }
 
-  itemsFromStorage.push(item); // Add new item to array
-
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage)); // Save updated array to localStorage
+  return itemsFromStorage;
 }
 
 // === UI: Create Delete Button with Icon ===
@@ -124,11 +136,16 @@ function checkUI() {
   }
 }
 
-// === EVENT LISTENERS ===
-itemForm.addEventListener("submit", onAddItemSubmit); // When user submits form
-itemList.addEventListener("click", removeItem); // When user clicks remove icon
-clearBtn.addEventListener("click", clearItems); // When user clicks "Clear All"
-itemFilter.addEventListener("input", filterItems); // When user types in filter field
+// === INITIALIZE APP ===
+function init() {
+  // === EVENT LISTENERS ===
+  itemForm.addEventListener("submit", onAddItemSubmit); // When user submits form
+  itemList.addEventListener("click", removeItem); // When user clicks remove icon
+  clearBtn.addEventListener("click", clearItems); // When user clicks "Clear All"
+  itemFilter.addEventListener("input", filterItems); // When user types in filter field
+  document.addEventListener("DOMContentLoaded", displayItems); // Displays item(s) on page load
 
-// === INITIAL UI STATE ===
-checkUI(); // Set initial state of UI based on whether there are any list items
+  checkUI();
+}
+
+init(); // created this function in order to clean up the global scope from clutter
