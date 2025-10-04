@@ -81,6 +81,9 @@ Traversy Media Tutorial
     - add code in clearItems() to remove local storage items
 
 // 10. Set Item To Edit
+    - Add edit functionality to onClickItem(e)
+    - add setItemToEdit(item) functino
+
 // 11.
 // 12.
 // 13.

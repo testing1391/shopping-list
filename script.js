@@ -5,6 +5,8 @@ const itemInput = document.querySelector("#item-input"); // The text input where
 const itemList = document.querySelector("#item-list"); // The unordered list where items will be displayed
 const clearBtn = document.querySelector("#clear"); // The "Clear All" button
 const itemFilter = document.querySelector("#filter"); // The input field to filter/search through items
+const formBtn = itemForm.querySelector("button"); // Submit button for adding or updating items
+let isEditMode = false; // flag to track whether list item is in edit mode
 
 // === FUNCTION: Display Stored Items on Load ===
 function displayItems() {
@@ -90,11 +92,36 @@ function createIcon(classes) {
   return icon;
 }
 
-// === EVENT: Remove Single Item from List ===
+// === EVENT: Remove or Edit Single Item from List ===
 function onClickItem(e) {
+  // Removes item if 'X' is clicked
   if (e.target.parentElement.classList.contains("remove-item")) {
     removeItem(e.target.parentElement.parentElement);
   }
+  // Edit mode is triggered if clicked outside of 'X'
+  else {
+    setItemToEdit(e.target);
+  }
+}
+
+// === FUNCTION: Edit Mode for Selected Item ===
+function setItemToEdit(item) {
+  isEditMode = true;
+
+  // Remove edit mode for all items
+  itemList
+    .querySelectorAll("li")
+    .forEach((i) => i.classList.remove("edit-mode"));
+
+  // Adds edit mode class to selected item
+  item.classList.add("edit-mode");
+
+  // Update form button to indicate editing state
+  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Update Item';
+  formBtn.style.backgroundColor = "#228B22";
+
+  // Populate input field with the item's current text
+  itemInput.value = item.textContent;
 }
 
 // === FUNCTION: Remove Item from DOM & Storage ===
@@ -169,7 +196,7 @@ function checkUI() {
 function init() {
   // === EVENT LISTENERS ===
   itemForm.addEventListener("submit", onAddItemSubmit); // When user submits form
-  itemList.addEventListener("click", onClickItem); // When user clicks remove icon
+  itemList.addEventListener("click", onClickItem); // When user clicks on list items (edit mode or item deletion)
   clearBtn.addEventListener("click", clearItems); // When user clicks "Clear All"
   itemFilter.addEventListener("input", filterItems); // When user types in filter field
   document.addEventListener("DOMContentLoaded", displayItems); // Displays item(s) on page load
