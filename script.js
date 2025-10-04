@@ -6,6 +6,7 @@ const itemList = document.querySelector("#item-list"); // The unordered list whe
 const clearBtn = document.querySelector("#clear"); // The "Clear All" button
 const itemFilter = document.querySelector("#filter"); // The input field to filter/search through items
 
+// === FUNCTION: Display Stored Items on Load ===
 function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDOM(item));
@@ -57,6 +58,7 @@ function addItemToStorage(item) {
   localStorage.setItem("items", JSON.stringify(itemsFromStorage)); // Save updated array to localStorage
 }
 
+// === STORAGE: Get Items from Local Storage ===
 function getItemsFromStorage() {
   let itemsFromStorage;
 
@@ -89,12 +91,36 @@ function createIcon(classes) {
 }
 
 // === EVENT: Remove Single Item from List ===
-function removeItem(e) {
-  // Check if the clicked element is inside a "remove-item" button
+function onClickItem(e) {
   if (e.target.parentElement.classList.contains("remove-item")) {
-    e.target.parentElement.parentElement.remove(); // Remove the <li> element
-    checkUI(); // Update UI (show/hide clear & filter if needed)
+    removeItem(e.target.parentElement.parentElement);
   }
+}
+
+// === FUNCTION: Remove Item from DOM & Storage ===
+function removeItem(item) {
+  if (confirm("Are you sure?")) {
+    // Remove item from DOM
+    item.remove();
+  }
+
+  // Remove Item from Storage
+  removeItemFromStorage(item.textContent);
+
+  // Update UI
+  checkUI();
+}
+
+// === STORAGE: Remove ITem from Local Storage ===
+function removeItemFromStorage(item) {
+  // Retrieve items from local storage
+  let itemsFromStorage = getItemsFromStorage();
+
+  // Filter out removed item
+  itemsFromStorage = itemsFromStorage.filter((i) => i != item);
+
+  // Update & save local storage items
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
 }
 
 // === EVENT: Clear All Items from List ===
@@ -103,6 +129,9 @@ function clearItems() {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
+
+  // Clear from local storage
+  localStorage.removeItem("items");
 
   checkUI(); // Update UI after clearing
 }
@@ -140,7 +169,7 @@ function checkUI() {
 function init() {
   // === EVENT LISTENERS ===
   itemForm.addEventListener("submit", onAddItemSubmit); // When user submits form
-  itemList.addEventListener("click", removeItem); // When user clicks remove icon
+  itemList.addEventListener("click", onClickItem); // When user clicks remove icon
   clearBtn.addEventListener("click", clearItems); // When user clicks "Clear All"
   itemFilter.addEventListener("input", filterItems); // When user types in filter field
   document.addEventListener("DOMContentLoaded", displayItems); // Displays item(s) on page load
