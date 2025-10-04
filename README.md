@@ -84,6 +84,11 @@ Traversy Media Tutorial
     - Add edit functionality to onClickItem(e)
     - add setItemToEdit(item) functino
 
-// 11.
+// 11. Update Item & Reset State
+    - onAddItemSubmit(e) function
+        add a check for edit mode (so submit button can display edit mode or add item accordingly)
+    - checkUI()
+        resets formBtn to 'add item' and disables edit mode
+
 // 12.
 // 13.

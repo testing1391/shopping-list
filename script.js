@@ -27,6 +27,23 @@ function onAddItemSubmit(e) {
     return;
   }
 
+  // Check for edit mode
+  if (isEditMode) {
+    const itemToEdit = itemList.querySelector('.edit-mode');
+
+    // Removes item from local storage
+    removeItemFromStorage(itemToEdit.textContent);
+
+    // Removes edit mode class
+    itemToEdit.classList.remove('edit-mode');
+
+    // Removes item from DOM
+    itemToEdit.remove();
+
+    // isEditMode go back to false
+    isEditMode = false;
+  }
+
   // Add new item to the DOM
   addItemToDOM(newItem);
 
@@ -190,6 +207,11 @@ function checkUI() {
     clearBtn.style.display = "block";
     itemFilter.style.display = "block";
   }
+
+  // Resets form button to "Add item" and disables edit mode
+  formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+  formBtn.style.backgroundColor='#333';
+  isEditMode = false;
 }
 
 // === INITIALIZE APP ===
