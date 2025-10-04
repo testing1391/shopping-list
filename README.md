@@ -82,7 +82,7 @@ Traversy Media Tutorial
 
 // 10. Set Item To Edit
     - Add edit functionality to onClickItem(e)
-    - add setItemToEdit(item) functino
+    - add setItemToEdit(item) function
 
 // 11. Update Item & Reset State
     - onAddItemSubmit(e) function
@@ -90,5 +90,17 @@ Traversy Media Tutorial
     - checkUI()
         resets formBtn to 'add item' and disables edit mode
 
-// 12.
+// 12. Prevent Duplicate Items
+    - create function checkIfItemExists(i) 
+    - update onAddItemSubmit(e) function
+        duplicate code
+    - Personal fixes (not in video)
+        edited items not being checked for duplication
+        case sensitivity not being checked so added lowercase 
+        clicking on the ul was entering edit mode, added fix
+
 // 13.
+
+
+NOTES:
+In future, need to make the code dryer...some code duplication exists and organization could be better. Functions can be broken down further for readability and usability 

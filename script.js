@@ -29,19 +29,32 @@ function onAddItemSubmit(e) {
 
   // Check for edit mode
   if (isEditMode) {
-    const itemToEdit = itemList.querySelector('.edit-mode');
+    const itemToEdit = itemList.querySelector(".edit-mode");
+
+    // Checks if the newly edited item is a dupe
+    if (checkIfItemExists(newItem)) {
+      alert("That item already exists!");
+      itemToEdit.classList.remove("edit-mode");
+      checkUI();
+      return;
+    }
 
     // Removes item from local storage
     removeItemFromStorage(itemToEdit.textContent);
 
     // Removes edit mode class
-    itemToEdit.classList.remove('edit-mode');
+    itemToEdit.classList.remove("edit-mode");
 
     // Removes item from DOM
     itemToEdit.remove();
 
     // isEditMode go back to false
     isEditMode = false;
+  } else {
+    if (checkIfItemExists(newItem)) {
+      alert("That item already exists!");
+      return;
+    }
   }
 
   // Add new item to the DOM
@@ -111,6 +124,8 @@ function createIcon(classes) {
 
 // === EVENT: Remove or Edit Single Item from List ===
 function onClickItem(e) {
+  // prevents clicking on UL element from entering edit mode
+  if (e.target.id === "item-list") return;
   // Removes item if 'X' is clicked
   if (e.target.parentElement.classList.contains("remove-item")) {
     removeItem(e.target.parentElement.parentElement);
@@ -119,6 +134,17 @@ function onClickItem(e) {
   else {
     setItemToEdit(e.target);
   }
+}
+
+// === FUNCTION: Checks for duplicated items ===
+function checkIfItemExists(item) {
+  const itemsFromStorage = getItemsFromStorage();
+
+  // Converts storage items to lowercase
+  const itemsLowerCase = itemsFromStorage.map((str) => str.toLowerCase());
+
+  // returns true or false
+  return itemsLowerCase.includes(item.toLowerCase());
 }
 
 // === FUNCTION: Edit Mode for Selected Item ===
@@ -210,7 +236,7 @@ function checkUI() {
 
   // Resets form button to "Add item" and disables edit mode
   formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
-  formBtn.style.backgroundColor='#333';
+  formBtn.style.backgroundColor = "#333";
   isEditMode = false;
 }
 
